@@ -27,10 +27,10 @@ contract AssetDistribution {
         if (msg.sender == issuer) {
             assetCount++;
             Asset memory tempAsset = Asset(assetCount,newOwner,description,cost);
-            //ownerAssets[newOwner][assetCount] = tempAsset;
             setAssetOwnership(newOwner,assetCount,tempAsset);
+            return "asset created";
     } else { 
-        return "not the creator";
+        return "you are not the owner of contract";
     }
     }
   
@@ -39,12 +39,27 @@ contract AssetDistribution {
         assetAddress[assetId] = userId;
     }
 
-    function getCurrentOwner(uint assetId) constant returns (address) {
+    function getCurrentOwner(uint assetId) constant public returns (address) {
         return assetAddress[assetId];
     }
 
-    function transferOwnership(address from, address to, uint assetId) {
-
+    function transferOwnership(address to, uint assetId) public returns(string) {
+        address from = msg.sender;
+        if (isOwnerOfAsset(from, assetId)) {
+            Asset memory tempAsset = ownerAssets[from][assetId];
+            setAssetOwnership(to,assetId,tempAsset);
+            delete ownerAssets[from][assetId];
+            return("Asset Transferred");
+        } else {
+            return("Asset not available at this address");
+        }
     }
+    function isOwnerOfAsset(address userId, uint assetId) private constant returns(bool) {
+        return assetAddress[assetId] == userId? true:false;
+    }
+
+
+
 }
+
     
