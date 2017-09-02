@@ -3,7 +3,7 @@ pragma solidity ^0.4.2;
 contract AssetDistribution { 
     address public issuer;
     uint public assetCount;
-    
+    //test///
     event AllocationDetails(address from, address to, string description);
 
     function AssetDistribution() {
